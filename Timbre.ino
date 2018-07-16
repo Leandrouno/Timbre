@@ -19,7 +19,7 @@ const char respuesta[] = "Timbre";
 
 
 // Initialize Telegram BOT
-const char BotToken[] = "566903986:AAEs-5oiAimxg5HJXgbV_WuJjSoTXmTzLtM";
+const char BotToken[] = "********:yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy";
 
 WiFiClientSecure net_ssl;
 TelegramBot bot (BotToken, net_ssl);
@@ -70,7 +70,7 @@ void loop() { if(band==0){
                           band=1;
                           }
 
-                            if ( ButonPresionadoFlag ) {  Serial.println("Enviando Mensaje.....");  bot.sendMessage("590173240", "Timbre");
+                            if ( ButonPresionadoFlag ) {  Serial.println("Enviando Mensaje.....");  bot.sendMessage("xxxxxxxx", "Timbre");
                                                           Serial.println("Mensaje Enviado");  Serial.println( milis/1000);  Serial.println(" ");
                                                           ButonPresionadoFlag = false;
                                                           milisant=milis;
