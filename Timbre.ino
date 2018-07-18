@@ -2,24 +2,19 @@
 #include <WiFiClientSecure.h>
 #include <TelegramBot.h>
 
-
 #define BUTTON_PIN D5
 #define LED_BUILTIN D2
 volatile bool ButonPresionadoFlag = false;
 
 // Initialize Wifi connection to the router
 
+const char* ssid  = "xxxxxxxxxxxx";
+const char* password = "xxxxxxxx";
 
-const char* ssid  = "xxxxx";
-const char* password = "xxxxx";
-
-
-
-
-
-
+// Respuesta
+const char respuesta[] = "Timbre", id_chat[]="xxxxxxxxxxx" , iniciado[]="Sistema Iniciado....";
 // Initialize Telegram BOT
-const char BotToken[] = "xxxxxx:yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy";
+const char BotToken[] = "xxxxxxx:yyyyyyyyyyyyyyyyyyyyyyyy";
 
 WiFiClientSecure net_ssl;
 TelegramBot bot (BotToken, net_ssl);
@@ -67,7 +62,7 @@ void ButonPresionado() {
 void loop() { if(BanderaInicio == 0){
                           Serial.println("Iniciado...");
                           Serial.println("Enviando Mensaje de Inicio....."); 
-                          bot.sendMessage("xxxxxxx", "Iniciado");
+                          bot.sendMessage(id_chat, iniciado);
                           Serial.println("Mensaje Enviado"); 
                           Serial.println(" "); 
                           BanderaInicio=1;
@@ -75,7 +70,7 @@ void loop() { if(BanderaInicio == 0){
 
               if ( ButonPresionadoFlag ) {  Serial.println("Enviando Mensaje.....");  
                                              ButonPresionadoFlag = false;
-                                            bot.sendMessage("xxxxxxxx", "Timbre");
+                                            bot.sendMessage(id_chat, respuesta);
                                             Serial.println("Mensaje Enviado");
                                             Serial.println(" "); 
                                             BanderaBoton = 0;
