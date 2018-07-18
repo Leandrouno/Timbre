@@ -1,20 +1,21 @@
+// Incluyo Librerias
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <TelegramBot.h>
-
-#define BUTTON_PIN D5
+// Defino Pines
+#define BOTON_PIN D5
 #define LED_BUILTIN D2
-volatile bool ButonPresionadoFlag = false;
+volatile bool BanderaBotonPresionado = false;
 
-// Initialize Wifi connection to the router
-
-const char* ssid  = "xxxxxxxxxxxx";
-const char* password = "xxxxxxxx";
-
+// Inicializa la conexión Wifi al router
+const char* ssid  = "XXXXXXXXXXX"; // Nombre de la RED WIFI
+const char* password = "XXXXXXXX"; // Contraseña de la Red Wifi
+const char  id_chat[]="XXXXX"; // ID del Chat de Telegram
+// Inicializa Telegram BOT
+const char BotToken[] = "XXXXXXXX:YYYYYYYYYYYYYYYYYY"; // BotToken de Telegram
 // Respuesta
-const char respuesta[] = "Timbre", id_chat[]="xxxxxxxxxxx" , iniciado[]="Sistema Iniciado....";
-// Initialize Telegram BOT
-const char BotToken[] = "xxxxxxx:yyyyyyyyyyyyyyyyyyyyyyyy";
+const char respuesta[] = "Timbre" , iniciado[]="Sistema Iniciado....";
+
 
 WiFiClientSecure net_ssl;
 TelegramBot bot (BotToken, net_ssl);
@@ -24,9 +25,9 @@ void setup() {
 
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(115200);
-  while (!Serial); // Wait for the Serial monitor to be opened
+  while (!Serial); // Espera a que el Monitor Serial este abierto
 
-  // attempt to connect to Wifi network:
+  // Intenta conectarse a la red Wifi
   Serial.print("Connectando Wifi: ");
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -39,20 +40,19 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   bot.begin();
-  pinMode(BUTTON_PIN, INPUT);
-  attachInterrupt(BUTTON_PIN, ButonPresionado, RISING);
+  pinMode(BOTON_PIN, INPUT);
+  attachInterrupt(BOTON_PIN, BotonPresionado, RISING);
 
   Serial.println(" ");
  
 
 } // FIN SETUP
 
-
-void ButonPresionado() {    
-                        int button = digitalRead(BUTTON_PIN);
+void BotonPresionado() {    
+                        int button = digitalRead(BOTON_PIN);
                         if(button == HIGH && BanderaBoton == 0)
                           {
-                          ButonPresionadoFlag = true; 
+                          BanderaBotonPresionado = true; 
                           Serial.println("Boton Presionado");
                           BanderaBoton = 1;
                           }                                                    
@@ -68,13 +68,13 @@ void loop() { if(BanderaInicio == 0){
                           BanderaInicio=1;
                           }
 
-              if ( ButonPresionadoFlag ) {  Serial.println("Enviando Mensaje.....");  
-                                             ButonPresionadoFlag = false;
+              if ( BanderaBotonPresionado ) {  Serial.println("Enviando Mensaje.....");  
+                                             BanderaBotonPresionado = false;
                                             bot.sendMessage(id_chat, respuesta);
                                             Serial.println("Mensaje Enviado");
                                             Serial.println(" "); 
                                             BanderaBoton = 0;
-                                         } // FIN ButonPresionadoFlag
+                                         } // FIN BanderaBotonPresionado
 
 
               if (WiFi.status() == WL_CONNECTED) {
