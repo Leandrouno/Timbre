@@ -11,19 +11,19 @@ volatile bool ButonPresionadoFlag = false;
 
 
 const char* ssid  = "xxxxx";
-const char* password = "yyyy";
+const char* password = "xxxxx";
 
 
-// Respuesta
-const char respuesta[] = "Timbre";
+
+
 
 
 // Initialize Telegram BOT
-const char BotToken[] = "********:yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy";
+const char BotToken[] = "xxxxxx:yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy";
 
 WiFiClientSecure net_ssl;
 TelegramBot bot (BotToken, net_ssl);
-int band=0,  milis = 0, milisant = 0;
+int BanderaInicio=0, BanderaBoton=0;
 
 void setup() {
 
@@ -43,36 +43,46 @@ void setup() {
   Serial.println("WiFi connectado");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-  digitalWrite(LED_BUILTIN, HIGH);
   bot.begin();
   pinMode(BUTTON_PIN, INPUT);
   attachInterrupt(BUTTON_PIN, ButonPresionado, RISING);
+
+  Serial.println(" ");
+ 
 
 } // FIN SETUP
 
 
 void ButonPresionado() {    
-  
                         int button = digitalRead(BUTTON_PIN);
-                        milis = millis();
-                                if(milis-milisant < 10 || milis-milisant > 2000){ if(button == HIGH){
-                                                                                                       Serial.println("Boton Presionado");
-                                                                                                        ButonPresionadoFlag = true;
-                                                                                                        milisant=milis; 
-                                                                                                      }
-                                                                                }
-                     return;
-                      } // FIN  Boton Presionado
+                        if(button == HIGH && BanderaBoton == 0)
+                          {
+                          ButonPresionadoFlag = true; 
+                          Serial.println("Boton Presionado");
+                          BanderaBoton = 1;
+                          }                                                    
+                        return;
+                       } // FIN  Boton Presionado
                       
-void loop() { if(band==0){
+void loop() { if(BanderaInicio == 0){
                           Serial.println("Iniciado...");
-                          Serial.println(" ");
-                          band=1;
+                          Serial.println("Enviando Mensaje de Inicio....."); 
+                          bot.sendMessage("xxxxxxx", "Iniciado");
+                          Serial.println("Mensaje Enviado"); 
+                          Serial.println(" "); 
+                          BanderaInicio=1;
                           }
 
-                            if ( ButonPresionadoFlag ) {  Serial.println("Enviando Mensaje.....");  bot.sendMessage("xxxxxxxx", "Timbre");
-                                                          Serial.println("Mensaje Enviado");  Serial.println( milis/1000);  Serial.println(" ");
-                                                          ButonPresionadoFlag = false;
-                                                          milisant=milis;
-                                                        } // FIN ButonPresionadoFlag
-                        }// FIN LOOP
+              if ( ButonPresionadoFlag ) {  Serial.println("Enviando Mensaje.....");  
+                                             ButonPresionadoFlag = false;
+                                            bot.sendMessage("xxxxxxxx", "Timbre");
+                                            Serial.println("Mensaje Enviado");
+                                            Serial.println(" "); 
+                                            BanderaBoton = 0;
+                                         } // FIN ButonPresionadoFlag
+
+
+              if (WiFi.status() == WL_CONNECTED) {
+                            digitalWrite(LED_BUILTIN, HIGH);
+                                        } else {digitalWrite(LED_BUILTIN, LOW);}
+              }// FIN LOOP
