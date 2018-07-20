@@ -59,25 +59,34 @@ void BotonPresionado() {
                         return;
                        } // FIN  Boton Presionado
                       
-void loop() { if(BanderaInicio == 0){
-                          Serial.println("Iniciado...");
+void loop() { 
+			        if(BanderaInicio == 0){ mensaje_inicio ();}
+              if ( BanderaBotonPresionado ) {  envio_mensaje ();} 
+              if (WiFi.status() == WL_CONNECTED) {
+                            digitalWrite(LED_BUILTIN, HIGH);
+                                        } else {digitalWrite(LED_BUILTIN, LOW);}
+              }// FIN LOOP
+			  
+			  
+void mensaje_inicio (){
+	
+						  Serial.println("Iniciado...");
                           Serial.println("Enviando Mensaje de Inicio....."); 
                           bot.sendMessage(id_chat, iniciado);
                           Serial.println("Mensaje Enviado"); 
                           Serial.println(" "); 
                           BanderaInicio=1;
-                          }
-
-              if ( BanderaBotonPresionado ) {  Serial.println("Enviando Mensaje.....");  
-                                             BanderaBotonPresionado = false;
-                                            bot.sendMessage(id_chat, respuesta);
-                                            Serial.println("Mensaje Enviado");
-                                            Serial.println(" "); 
-                                            BanderaBoton = 0;
-                                         } // FIN BanderaBotonPresionado
-
-
-              if (WiFi.status() == WL_CONNECTED) {
-                            digitalWrite(LED_BUILTIN, HIGH);
-                                        } else {digitalWrite(LED_BUILTIN, LOW);}
-              }// FIN LOOP
+                          
+	
+} // FIN Mensaje de inicio
+			  
+void envio_mensaje (){
+	
+						Serial.println("Enviando Mensaje.....");  
+                        BanderaBotonPresionado = false;
+                        bot.sendMessage(id_chat, respuesta);
+                        Serial.println("Mensaje Enviado");
+                        Serial.println(" "); 
+                        BanderaBoton = 0;
+                                         
+}	// FIN Envio de Mensaje		 
